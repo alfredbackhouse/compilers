@@ -27,6 +27,7 @@ and stmt =
   | RepeatStmt of expr * stmt
   | LoopStmt of stmt
   | ExitStmt
+  | CaseStmt of expr * (int list * stmt) list * stmt 
 
 and expr = 
     Constant of int 

@@ -25,7 +25,8 @@ let kwtable =
       ("or", ADDOP Or); ("not", MONOP Not); ("mod", MULOP Mod);
       ("true", NUMBER 1); ("false", NUMBER 0); 
       ("repeat", REPEAT); ("until", UNTIL);
-      ("loop", LOOP); ("exit", EXIT) ]
+      ("loop", LOOP); ("exit", EXIT);
+      ("case", CASE); ("of", OF) ]
 
 (* |idtable| -- table of all identifiers seen so far *)
 let idtable = Hashtbl.create 64
@@ -44,7 +45,7 @@ let get_vars () =
 
 rule token = 
   parse
-      ['A'-'Z''a'-'z']['A'-'Z''a'-'z''0'-'9''_']* as s
+    ['A'-'Z''a'-'z']['A'-'Z''a'-'z''0'-'9''_']* as s
                         { lookup s }
     | ['0'-'9']+ as s   { NUMBER (int_of_string s) }
     | ";"               { SEMI }
@@ -63,6 +64,7 @@ rule token =
     | "<="              { RELOP Leq }
     | ">="              { RELOP Geq }
     | ":="              { ASSIGN }
+    | "|"               { VBAR } 
     | [' ''\t']+        { token lexbuf }
     | "(*"              { comment lexbuf; token lexbuf }
     | "\r"              { token lexbuf }
