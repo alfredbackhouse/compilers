@@ -72,11 +72,10 @@ and expr_type e env =
       Variable x -> 
         lookup_def x env
     | Sub (v, e) -> 
-        (match check_expr e env with 
-          Integer -> (match check_expr v env with 
-            Array (x,y) -> y
-          | _ -> failwith "bad sub expr - indexing a non array")
-        | _ -> failwith "bad sub expr - index is not an int")
+        (if check_expr e env != Integer then type_error();
+         let tv = check_expr v env in 
+         if (not (is_array tv)) then type_error();
+         base_type tv)
     | Constant (n, t) -> t
     | Monop (w, e1) -> 
         let t = check_expr e1 env in

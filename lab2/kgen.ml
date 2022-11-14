@@ -34,9 +34,8 @@ and gen_addr v =
         let d = get_def x in
         SEQ [LINE x.x_line; GLOBAL d.d_lab]
     | Sub (a, i) ->
-        let base = get_def a 
-        and offset = i * type_size a in 
-        SEQ[LINE a.x_line; GLOBAL base.d_lab]
+        let x = a.e_type in 
+        SEQ [LINE (line_number a); gen_addr a; gen_expr i; CONST (type_size x); BINOP Times; OFFSET]
     | _ -> 
         failwith "gen_addr"
 
@@ -84,7 +83,7 @@ let rec gen_stmt =
 let gen_decl (Decl (xs, t)) =
   List.iter (fun x ->
       let d = get_def x in
-      let s = 4 in
+      let s = type_size d.d_type in
       printf "GLOVAR $ $\n" [fStr d.d_lab; fNum s]) xs
 
 (* |translate| -- generate code for the whole program *)
