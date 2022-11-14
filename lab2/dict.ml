@@ -34,3 +34,24 @@ let lookup x (Env e) = IdMap.find x e
 
 (* |init_env| -- empty environment *)
 let init_env = Env IdMap.empty
+
+let rec type_size p = 
+  match p with 
+    Integer         -> 4
+  | Boolean         -> 1
+  | Array (x,y)     -> x * type_size y
+  | Void            -> 0
+
+let is_array p =
+  match p with 
+    Integer         -> false 
+  | Boolean         -> false
+  | Array _         -> true
+  | Void            -> false
+
+let rec base_type p = 
+  match p with 
+    Integer         -> Integer
+  | Boolean         -> Boolean
+  | Array (x,y)     -> base_type y
+  | Void            -> Void

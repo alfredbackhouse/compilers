@@ -25,3 +25,9 @@ val lookup : ident -> environment -> def
 
 (* |init_env| -- initial empty environment *)
 val init_env : environment
+
+val type_size: ptype -> int
+
+val is_array: ptype -> bool 
+
+val base_type: ptype -> ptype 

@@ -33,7 +33,11 @@ and gen_addr v =
       Variable x ->
         let d = get_def x in
         SEQ [LINE x.x_line; GLOBAL d.d_lab]
-    | _ ->
+    | Sub (a, i) ->
+        let base = get_def a 
+        and offset = i * type_size a in 
+        SEQ[LINE a.x_line; GLOBAL base.d_lab]
+    | _ -> 
         failwith "gen_addr"
 
 (* |gen_cond| -- generate code for short-circuit condition *)
